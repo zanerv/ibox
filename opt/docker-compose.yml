@@ -10,7 +10,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /dev/rtc:/dev/rtc:ro
       - ${OPT}/storj/identity/storagenode:/app/identity
-      - /storagenode:/app/config
+      - ${OPT}/storj/storagenode:/app/config
     environment:
      - WALLET=${WALLET_ADDRESS}
      - EMAIL=${STORJ_EMAIL}
