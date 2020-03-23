@@ -16,7 +16,7 @@ services:
      - EMAIL=${STORJ_EMAIL}
      - ADDRESS=${RPCADDRESS}:28967
      - BANDWIDTH=80TB
-     - STORAGE=8TB
+     - STORAGE=7TB
     ports:
       - 28967:28967
       - 14002:14002
