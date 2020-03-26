@@ -1,4 +1,5 @@
 #!/bin/bash
+HOSTNAME=$(hostname)
 aSMART=( $(/usr/sbin/smartctl -a /dev/sda|egrep -i "^  5|^187|^188|^197|^198|^194"|awk '{print $2, $10}') )
 echo "SMART,Host=${HOSTNAME} ${aSMART[0]}=${aSMART[1]},${aSMART[2]}=${aSMART[3]},${aSMART[4]}=${aSMART[5]},\
 ${aSMART[6]}=${aSMART[7]},${aSMART[8]}=${aSMART[9]},${aSMART[10]}=${aSMART[11]} $(date +%s%N)"
