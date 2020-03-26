@@ -11,7 +11,7 @@ IP() {
   i=0
   while [ ${i} -lt 10 ]; do
     IP=$(host $(hostname -f) ${dns} | awk '{print $4}' | tr -d '[:space:]')
-    NewIP=$(curl -s https://${DOMAIN}| tr -d '[:space:]')
+    NewIP=$(curl -s https://ifconfig.me| tr -d '[:space:]')
     if [[ $? -gt 0 ]]; then
       break
     fi
@@ -28,6 +28,6 @@ if [[ ${ONLINE} -eq 1 ]]; then
 else
   IP
   if [[ ${IP} != ${NewIP} && -n ${NewIP} && -n ${IP} ]]; then
-   curl -su ${username}:${password} "https://${DOMAIN}/dyndns.php?hostname=$(hostname)&myip=${NewIP}"
+   curl -su ${1}:${2} "https://${3}/dyndns.php?hostname=$(hostname)&myip=${NewIP}"
   fi
 fi
