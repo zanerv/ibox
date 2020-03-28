@@ -11,19 +11,19 @@ temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
 echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},temperature=${temperature::2},\
 last_boot=$(stat -c %Z /proc/) $(date +%s%N)"
 
-satellites=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/satellites)
-dashboard=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/dashboard)
-bandwidthSummary=$(echo ${satellites}| jq -r .data.bandwidthSummary)
-egressSummary=$(echo ${satellites}| jq -r '.data.bandwidthDaily[].egress'\
+satellites=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/satellites)
+dashboard=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/)
+bandwidthSummary=$(echo ${satellites}| jq -r .bandwidthSummary)
+egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
     | jq -n 'reduce (inputs | to_entries[]) as {$key,$value} ({}; .[$key] += $value)'\
     | jq -r .[]| paste -s -d+ - | bc)
-egressDaily=$(echo ${satellites}| jq -r .data.bandwidthDaily[-1].egress[]| paste -s -d+ - | bc)
-diskSpace=$(echo ${dashboard}| jq -r .data.diskSpace.used)
+egressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].egress[]| paste -s -d+ - | bc)
+diskSpace=$(echo ${dashboard}| jq -r .diskSpace.used)
 error=$(echo ${dashboard}| jq .error)
-lastPinged=$(echo ${dashboard}| jq .data.lastPinged)
-upToDate=$(echo ${dashboard}| jq .data.upToDate)
-nodeID=$(echo ${dashboard}| jq -r .data.nodeID)
-wallet=$(echo ${dashboard}| jq .data.wallet)
+lastPinged=$(echo ${dashboard}| jq .lastPinged)
+upToDate=$(echo ${dashboard}| jq .upToDate)
+nodeID=$(echo ${dashboard}| jq -r .nodeID)
+wallet=$(echo ${dashboard}| jq .wallet)
 
 echo "Storj,nodeID=${nodeID::7} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
 egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
