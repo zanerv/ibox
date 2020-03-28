@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e
 update() {
-    echo "Error on line $1"
-    echo "Updating..."
+    echo "Sys,Host=${HOSTNAME} error=$1 $(date +%s%N)"
     wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -O /opt/martor.sh&&chmod +x /opt/martor.sh
     wget -q https://github.com/zanerv/ibox/raw/master/opt/ddns.sh -O /opt/ddns.sh&&chmod +x /opt/ddns.sh
     wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/docker-compose.yml -O /opt/docker-compose.yml
     wget -q https://github.com/zanerv/ibox/raw/master/opt/successrate.sh -O /opt/successrate.sh&&chmod +x /opt/successrate.sh
+    
+    /usr/bin/docker-compose -f /opt/docker-compose.yml pull >/dev/null 2>&1 &&\
+    /usr/bin/docker-compose -f /opt/docker-compose.yml up -d >/dev/null 2>&1
 }
 trap "update $(($LINENO + 14))" ERR
 
@@ -42,8 +44,6 @@ upToDate=${upToDate},wallet=${wallet} $(date +%s%N)"
 if [[ -n ${error} ]]; then
     echo "Storj,nodeID=${nodeID::7} error=${error} $(date +%s%N)"
 fi
-
 if [[ ${upToDate} != 'true']];then
-    /usr/bin/docker-compose -f /opt/docker-compose.yml pull >/dev/null 2>&1 &&\
-    /usr/bin/docker-compose -f /opt/docker-compose.yml up -d  2>&1|grep -Ev "\-date"
+    update
 fi
