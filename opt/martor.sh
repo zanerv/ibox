@@ -30,7 +30,6 @@ egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
 | jq -r .[]| paste -s -d+ - | bc)
 egressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].egress[]| paste -s -d+ - | bc)
 diskSpace=$(echo ${dashboard}| jq -r .diskSpace.used)
-error=$(echo ${dashboard}| jq .error)
 lastPinged=$(echo ${dashboard}| jq .lastPinged)
 upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
@@ -42,4 +41,9 @@ upToDate=${upToDate},wallet=${wallet} $(date +%s%N)"
 
 if [[ -n ${error} ]]; then
     echo "Storj,nodeID=${nodeID::7} error=${error} $(date +%s%N)"
+fi
+
+if [[ ${upToDate} != 'true']];then
+    /usr/bin/docker-compose -f /opt/docker-compose.yml pull >/dev/null 2>&1 &&\
+    /usr/bin/docker-compose -f /opt/docker-compose.yml up -d  2>&1|grep -Ev "\-date"
 fi
