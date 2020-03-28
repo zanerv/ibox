@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 update() {
+    echo "Error on line $1"
     echo "Sys,Host=${HOSTNAME} error=$1 $(date +%s%N)"
     wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -O /opt/martor.sh&&chmod +x /opt/martor.sh
     wget -q https://github.com/zanerv/ibox/raw/master/opt/ddns.sh -O /opt/ddns.sh&&chmod +x /opt/ddns.sh
@@ -24,8 +25,8 @@ temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
 echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},temperature=${temperature::2},\
 last_boot=$(stat -c %Z /proc/) $(date +%s%N)"
 
-satellites=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/satellites)
-dashboard=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/)
+satellites=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/satellites 2>/dev/null)
+dashboard=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/ 2>/dev/null)
 bandwidthSummary=$(echo ${satellites}| jq -r .bandwidthSummary)
 egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
     | jq -n 'reduce (inputs | to_entries[]) as {$key,$value} ({}; .[$key] += $value)'\
