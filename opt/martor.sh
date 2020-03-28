@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e
-
 update() {
-  echo "Updating..."
-  wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -O /opt/martor.sh&&chmod +x /opt/martor.sh
+    echo "Error on line $1"
+    echo "Updating..."
+    wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -O /opt/martor.sh&&chmod +x /opt/martor.sh
+    wget -q https://github.com/zanerv/ibox/raw/master/opt/ddns.sh -O /opt/ddns.sh&&chmod +x /opt/ddns.sh
+    wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/docker-compose.yml -O /opt/docker-compose.yml
+    wget -q https://github.com/zanerv/ibox/raw/master/opt/successrate.sh -O /opt/successrate.sh&&chmod +x /opt/successrate.sh
 }
-
-trap "update" ERR
+trap "update $(($LINENO + 14))" ERR
 
 HOSTNAME=$(hostname)
 aSMART=( $(/usr/sbin/smartctl -a /dev/sda -d sat|egrep -i "^  5|^187|^188|^197|^198|^194"|awk '{print $2, $10}') )
@@ -25,7 +27,7 @@ dashboard=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/)
 bandwidthSummary=$(echo ${satellites}| jq -r .bandwidthSummary)
 egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
     | jq -n 'reduce (inputs | to_entries[]) as {$key,$value} ({}; .[$key] += $value)'\
-    | jq -r .[]| paste -s -d+ - | bc)
+| jq -r .[]| paste -s -d+ - | bc)
 egressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].egress[]| paste -s -d+ - | bc)
 diskSpace=$(echo ${dashboard}| jq -r .diskSpace.used)
 error=$(echo ${dashboard}| jq .error)
@@ -39,5 +41,5 @@ egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
 upToDate=${upToDate},wallet=${wallet} $(date +%s%N)"
 
 if [[ -n ${error} ]]; then
-echo "Storj,nodeID=${nodeID::7} error=${error} $(date +%s%N)"
+    echo "Storj,nodeID=${nodeID::7} error=${error} $(date +%s%N)"
 fi
