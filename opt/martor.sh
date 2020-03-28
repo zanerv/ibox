@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 update() {
-    echo "Error on line $1"
     echo "Sys,Host=${HOSTNAME} error=$1 $(date +%s%N)"
     wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -O /opt/martor.sh&&chmod +x /opt/martor.sh
     wget -q https://github.com/zanerv/ibox/raw/master/opt/ddns.sh -O /opt/ddns.sh&&chmod +x /opt/ddns.sh
