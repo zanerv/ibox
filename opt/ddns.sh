@@ -1,3 +1,4 @@
+#!/bin/bash
 dns=$(cat /etc/resolv.conf |grep -i '^nameserver'|tail -1|cut -d ' ' -f2)
 check() {
   ping ${dns} -c 1 -i .2 >/dev/null 2>&1
