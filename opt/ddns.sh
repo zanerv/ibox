@@ -19,6 +19,7 @@ IP() {
       break
     fi
     sleep 5
+    i=$(( ${i} + 1 ))
   done
 }
 
