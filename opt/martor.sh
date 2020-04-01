@@ -44,6 +44,6 @@ upToDate=${upToDate},wallet=${wallet} $(date +%s%N)"
 if [[ -n ${error} ]]; then
     echo "Storj,nodeID=${nodeID::7} error=${error} $(date +%s%N)"
 fi
-if [[ ${upToDate} != 'true']];then
+if [[ ${upToDate} != 'true' ]]; then
     update
 fi
