@@ -24,8 +24,8 @@ temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
 echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},temperature=${temperature::2},\
 last_boot=$(stat -c %Z /proc/) $(date +%s%N)"
 
-satellites=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/satellites 2>/dev/null)
-dashboard=$(/usr/bin/docker exec storagenode curl -s localhost:14002/api/sno/ 2>/dev/null)
+satellites=$(curl -s localhost:14002/api/sno/satellites 2>/dev/null)
+dashboard=$(curl -s localhost:14002/api/sno/ 2>/dev/null)
 bandwidthSummary=$(echo ${satellites}| jq -r .bandwidthSummary)
 egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
     | jq -n 'reduce (inputs | to_entries[]) as {$key,$value} ({}; .[$key] += $value)'\
