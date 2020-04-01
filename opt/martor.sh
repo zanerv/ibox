@@ -15,7 +15,7 @@ trap "update $(($LINENO + 14))" ERR
 HOSTNAME=$(hostname)
 aSMART=( $(/usr/sbin/smartctl -a /dev/sda -d sat|egrep -i "^  5|^187|^188|^197|^198|^194"|awk '{print $2, $10}') )
 echo "SMART,Host=${HOSTNAME} ${aSMART[0]}=${aSMART[1]},${aSMART[2]}=${aSMART[3]},${aSMART[4]}=${aSMART[5]},\
-${aSMART[6]}=${aSMART[7]},${aSMART[8]}=${aSMART[9]},${aSMART[10]}=${aSMART[11]} $(date +%s%N)"
+${aSMART[6]}=${aSMART[7]} $(date +%s%N)"
 
 cpu=$(uptime | awk '{print $10+0}')
 memory=$(free -m | awk 'NR==2{printf "%.0f", $3*100/$2 }')
