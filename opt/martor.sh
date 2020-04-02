@@ -37,12 +37,12 @@ upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
 wallet=$(echo ${dashboard}| jq .wallet)
 
-echo "Storj,NodeID=${nodeID::7} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
+echo "Storj,NodeId=${nodeID::7} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
 egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
 upToDate=${upToDate},wallet=${wallet} $(date +%s%N)"
 
 if [[ -n ${error} ]]; then
-    echo "Storj,NodeID=${nodeID::7} error=${error} $(date +%s%N)"
+    echo "Storj,NodeId=${nodeID::7} error=${error} $(date +%s%N)"
 fi
 if [[ ${upToDate} != 'true' ]]; then
     update
