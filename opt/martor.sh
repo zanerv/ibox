@@ -41,7 +41,7 @@ echo "Storj,NodeId=${nodeID::7} bandwidthSummary=${bandwidthSummary},egressSumma
 egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
 upToDate=${upToDate},wallet=${wallet} $(date +%s%N)"
 
-if [[ -n ${error} ]]; then
+if [[ -n ${error} || ${error} != 'null' ]]; then
     echo "Storj,NodeId=${nodeID::7} error=${error} $(date +%s%N)"
 fi
 if [[ ${upToDate} != 'true' ]]; then
