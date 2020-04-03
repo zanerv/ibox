@@ -22,7 +22,7 @@ memory=$(free -m | awk 'NR==2{printf "%.0f", $3*100/$2 }')
 disk=$(df -h|grep /$|awk '{print $5}'|tr -d %)
 temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
 echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},temperature=${temperature::2},\
-last_boot=$(date -d "$(uptime -s)" +"%s")"
+last_boot=$(date -d "$(uptime -s)" +"%s") $(date +%s%N)"
 
 satellites=$(curl -s localhost:14002/api/sno/satellites 2>/dev/null)
 dashboard=$(curl -s localhost:14002/api/sno/ 2>/dev/null)
