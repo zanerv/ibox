@@ -35,7 +35,12 @@ lastPinged=$(echo ${dashboard}| jq .lastPinged)
 upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
 wallet=$(echo ${dashboard}| jq -r .wallet)
-balance=$(curl -s "http://api.ethplorer.io/getAddressInfo/${wallet}?apiKey=freekey"|jq -r .tokens[].balance)
+balance_api=$(curl -s "http://api.ethplorer.io/getAddressInfo/${wallet}?apiKey=freekey")
+if [[ ${#balance_api} -gt 300 ]]; then
+ balance=$(echo ${balance_api}|jq -r .tokens[].balance)
+else
+ balance=0
+fi
 if [[ ${error} != 'null'  ]]; then
  error=", error=${error} "
 else
