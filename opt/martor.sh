@@ -37,13 +37,12 @@ upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
 wallet=$(echo ${dashboard}| jq -r .wallet)
 balance=$(curl -s "http://api.ethplorer.io/getAddressInfo/${wallet}?apiKey=freekey"|jq -r .tokens[].balance)
+if [[ ${error} != 'null'  ]]; then
+ error=", error=${error} "
+else
+ error=""
+fi
+
 echo "Storj,NodeId=${nodeID::7} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
 egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
-upToDate=${upToDate},wallet=\"${wallet}\",balance=${balance::4} $(date +%s%N)"
-
-if [[ -n ${error} || ${error} != 'null' ]]; then
-    echo "Storj,NodeId=${nodeID::7} error=${error} $(date +%s%N)"
-fi
-if [[ ${upToDate} != 'true' ]]; then
-    update
-fi
+upToDate=${upToDate},wallet=\"${wallet}\",balance=${balance::4} ${error} $(date +%s%N)"
