@@ -31,6 +31,7 @@ egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
 | jq -r .[]| paste -s -d+ - | bc)
 egressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].egress[]| paste -s -d+ - | bc)
 diskSpace=$(echo ${dashboard}| jq -r .diskSpace.used)
+error=$(echo ${dashboard}| jq .error)
 lastPinged=$(echo ${dashboard}| jq .lastPinged)
 upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
