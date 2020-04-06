@@ -39,6 +39,7 @@ wallet=$(echo ${dashboard}| jq -r .wallet)
 balance_api=$(curl -s "http://api.ethplorer.io/getAddressInfo/${wallet}?apiKey=freekey")
 if [[ ${#balance_api} -gt 300 ]]; then
  balance=$(echo ${balance_api}|jq -r .tokens[].balance)
+ balance=${balance::4}
 else
  balance=0
 fi
