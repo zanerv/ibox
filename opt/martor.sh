@@ -51,4 +51,4 @@ fi
 
 echo "Storj,NodeId=${nodeID::7} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
 egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
-upToDate=${upToDate},wallet=\"${wallet}\",balance=${balance::4} ${error} $(date +%s%N)"
+upToDate=${upToDate},wallet=\"${wallet}\",balance=${balance} ${error} $(date +%s%N)"
