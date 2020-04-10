@@ -7,15 +7,35 @@ services:
     hostname: storagenode 
     restart: unless-stopped
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /dev/rtc:/dev/rtc:ro
-      - /opt/appdata/storj/identity/storagenode:/app/identity
-      - /opt/appdata/storj/storagenode:/app/config
+      - type: bind
+        source: /opt/appdata/storj/storagenode
+        target: /app/config
+      - type: bind
+        source: /opt/appdata/storj/identity/storagenode
+        target: /app/identity
+        read_only: true
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+      - type: bind
+        source: /dev/rtc
+        target: /dev/rtc
+        read_only: true
     env_file:
       - storj.env
     ports:
       - 28967:28967
       - 14002:14002
+
+  watchtower:
+    image: storjlabs/watchtower
+    container_name: watchtower
+    hostname: watchtower    
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: storagenode watchtower --stop-timeout 300s --interval 21600
   
   openvpn:
     cap_add:
