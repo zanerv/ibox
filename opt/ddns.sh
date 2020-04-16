@@ -25,7 +25,7 @@ while [ ${i} -lt 10 ]; do
   i=$(( ${i} + 1 ))
 done
 if [[ ${IP} != ${NewIP} && -n ${NewIP} && -n ${IP} ]]; then
-   curl -su ${1}:${2} "https://$(dnsdomainname)/ibox.php?hostname=$(hostname)&myip=${NewIP}"
+   curl -su ${ddns_user}:${ddns_pass} "https://$(dnsdomainname)/ibox.php?hostname=$(hostname)&myip=${NewIP}"
 fi
 
 
