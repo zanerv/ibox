@@ -37,7 +37,7 @@ upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
 wallet=$(echo ${dashboard}| jq -r .wallet)
 balance_api=$(curl -s "http://api.ethplorer.io/getAddressInfo/${wallet}?apiKey=freekey")
-if [[ ${#balance_api} -gt 300 ]]; then
+if [[ ${balance_api} =~ "token" ]]; then
  balance=$(echo ${balance_api}|jq -r .tokens[].balance)
  balance=${balance::4}
 else
