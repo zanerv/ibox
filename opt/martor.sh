@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 update() {
-    wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -O /opt/martor.sh&&chmod +x /opt/martor.sh
+    #wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -O /opt/martor.sh&&chmod +x /opt/martor.sh
     wget -q https://github.com/zanerv/ibox/raw/master/opt/ddns.sh -O /opt/ddns.sh&&chmod +x /opt/ddns.sh
     #wget -q https://raw.githubusercontent.com/zanerv/ibox/master/opt/docker-compose.yml -O /opt/docker-compose.yml
     wget -q https://github.com/zanerv/ibox/raw/master/opt/successrate.sh -O /opt/successrate.sh&&chmod +x /opt/successrate.sh
