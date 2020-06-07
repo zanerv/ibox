@@ -13,8 +13,6 @@ trap "update $(($LINENO + 14))" ERR
 
 HOSTNAME=$(hostname)
 aSMART=( $(/usr/sbin/smartctl -a /dev/sda -d sat|egrep -i "^  5|^187|^188|^197|^198|^194"|awk '{print $2, $10}') )
-echo "SMART,Host=${HOSTNAME} ${aSMART[0]}=${aSMART[1]},${aSMART[2]}=${aSMART[3]},${aSMART[4]}=${aSMART[5]},\
-${aSMART[6]}=${aSMART[7]} $(date +%s%N)"
 
 cpu=$(uptime | awk '{print $10+0}')
 memory=$(free -m | awk 'NR==2{printf "%.0f", $3*100/$2 }')
@@ -35,6 +33,7 @@ error=$(echo ${dashboard}| jq .error)
 lastPinged=$(echo ${dashboard}| jq .lastPinged)
 upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
+nodeID=${nodeID::7}
 wallet=$(echo ${dashboard}| jq -r .wallet)
 balance_api=$(curl -s "http://api.ethplorer.io/getAddressInfo/${wallet}?apiKey=freekey")
 if [[ ${balance_api} =~ "token" ]]; then
@@ -49,6 +48,8 @@ else
  error=""
 fi
 
-echo "Storj,NodeId=${nodeID::7} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
+echo "SMART,NodeId=${nodeID} ${aSMART[0]}=${aSMART[1]},${aSMART[2]}=${aSMART[3]},${aSMART[4]}=${aSMART[5]},\
+${aSMART[6]}=${aSMART[7]} $(date +%s%N)"
+echo "Storj,NodeId=${nodeID} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
 egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
 upToDate=${upToDate},wallet=\"${wallet}\",balance=${balance} ${error} $(date +%s%N)"
