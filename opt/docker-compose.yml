@@ -2,7 +2,7 @@
 version: '3.4'
 services:
   storagenode:
-    image: storjlabs/storagenode:beta
+    image: storjlabs/storagenode:latest
     container_name: storagenode 
     hostname: storagenode 
     restart: unless-stopped
