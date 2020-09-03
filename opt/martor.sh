@@ -14,7 +14,7 @@ trap "update $(($LINENO + 14))" ERR
 HOSTNAME=$(hostname)
 aSMART=( $(/usr/sbin/smartctl -a /dev/sda -d sat|egrep -i "^  5|^187|^188|^197|^198|^194"|awk '{print $2, $10}') )
 
-cpu=$(uptime | awk '{print $10+0}')
+cpu=$(uptime|tail -c 5)
 memory=$(free -m | awk 'NR==2{printf "%.0f", $3*100/$2 }')
 disk=$(df -h|grep /$|awk '{print $5}'|tr -d %)
 temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
