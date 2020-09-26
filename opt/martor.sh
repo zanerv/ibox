@@ -3,7 +3,7 @@ set -e
 update() {
     curl -sf https://raw.githubusercontent.com/zanerv/ibox/master/opt/martor.sh -o /opt/martor.sh&&chmod +x /opt/martor.sh
     #curl -sf https://raw.githubusercontent.com/zanerv/ibox/master/opt/ddns.sh -o /opt/ddns.sh&&chmod +x /opt/ddns.sh
-    curl -sf https://raw.githubusercontent.com/zanerv/ibox/master/opt/docker-compose.yml -o /opt/docker-compose.yml
+    #curl -sf https://raw.githubusercontent.com/zanerv/ibox/master/opt/docker-compose.yml -o /opt/docker-compose.yml
     curl -sf https://raw.githubusercontent.com/zanerv/ibox/master/opt/successrate.sh -o /opt/successrate.sh&&chmod +x /opt/successrate.sh
     curl -sf https://raw.githubusercontent.com/ReneSmeekes/storj_earnings/master/earnings.py -o /opt/earnings.py
     
