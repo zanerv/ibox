@@ -29,6 +29,7 @@ egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
     | jq -n 'reduce (inputs | to_entries[]) as {$key,$value} ({}; .[$key] += $value)'\
 | jq -r .[]| paste -s -d+ - | bc)
 egressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].egress[]| paste -s -d+ - | bc)
+ingressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].ingress[]| paste -s -d+ - | bc)
 diskSpace=$(echo ${dashboard}| jq -r .diskSpace.used)
 error=$(echo ${dashboard}| jq .error)
 lastPinged=$(echo ${dashboard}| jq .lastPinged)
@@ -52,5 +53,5 @@ fi
 echo "SMART,NodeId=${nodeID} ${aSMART[0]}=${aSMART[1]},${aSMART[2]}=${aSMART[3]},${aSMART[4]}=${aSMART[5]},\
 ${aSMART[6]}=${aSMART[7]} $(date +%s%N)"
 echo "Storj,NodeId=${nodeID} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
-egressDaily=${egressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
+egressDaily=${egressDaily},ingressDaily=${ingressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
 upToDate=${upToDate},wallet=\"${wallet}\",balance=${balance} ${error} $(date +%s%N)"
