@@ -1,4 +1,5 @@
 #!/bin/bash
+source /opt/ddns
 dns=8.8.8.8
 check() {
   ping ${dns} -c 1 -i .2 >/dev/null 2>&1
