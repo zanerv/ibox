@@ -6,7 +6,7 @@ update() {
     #curl -sf https://raw.githubusercontent.com/zanerv/ibox/master/opt/docker-compose.yml -o /opt/docker-compose.yml
     curl -sf https://raw.githubusercontent.com/zanerv/ibox/master/opt/successrate.sh -o /opt/successrate.sh&&chmod +x /opt/successrate.sh
     curl -sf https://raw.githubusercontent.com/ReneSmeekes/storj_earnings/master/earnings.py -o /opt/earnings.py
-    
+    systemctl start docker
     /usr/bin/docker-compose -f /opt/docker-compose.yml pull >/dev/null 2>&1 &&\
     /usr/bin/docker-compose -f /opt/docker-compose.yml up -d >/dev/null 2>&1
 }
