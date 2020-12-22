@@ -24,13 +24,13 @@ last_boot=$(date -d "$(uptime -s)" +"%s"),iowait=${iowait} $(date +%s%N)"
 
 satellites=$(curl -s localhost:14002/api/sno/satellites 2>/dev/null)
 dashboard=$(curl -s localhost:14002/api/sno/ 2>/dev/null)
-bandwidthSummary=$(echo ${satellites}| jq -r .bandwidthSummary)
+bandwidthSummary=$(echo ${satellites}| jq -r .bandwidthSummary 2>/dev/null)
 egressSummary=$(echo ${satellites}| jq -r '.bandwidthDaily[].egress'\
     | jq -n 'reduce (inputs | to_entries[]) as {$key,$value} ({}; .[$key] += $value)'\
 | jq -r .[]| paste -s -d+ - | bc)
-egressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].egress[]| paste -s -d+ - | bc)
-ingressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].ingress[]| paste -s -d+ - | bc)
-diskSpace=$(echo ${dashboard}| jq -r .diskSpace.used)
+egressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].egress[] 2>/dev/null| paste -s -d+ - | bc)
+ingressDaily=$(echo ${satellites}| jq -r .bandwidthDaily[-1].ingress[] 2>/dev/null| paste -s -d+ - | bc)
+diskSpace=$(echo ${dashboard}| jq -r .diskSpace.used 2>/dev/null)
 error=$(echo ${dashboard}| jq .error)
 lastPinged=$(echo ${dashboard}| jq .lastPinged)
 upToDate=$(echo ${dashboard}| jq .upToDate)
