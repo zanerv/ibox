@@ -37,13 +37,12 @@ upToDate=$(echo ${dashboard}| jq .upToDate)
 nodeID=$(echo ${dashboard}| jq -r .nodeID)
 nodeID=${nodeID::7}
 wallet=$(echo ${dashboard}| jq -r .wallet)
-balance_api=$(curl -s "https://api.ethplorer.io/getAddressInfo/${wallet}?apiKey=freekey")
-if [[ ${balance_api} =~ "token" ]]; then
- balance=$(echo ${balance_api}|jq -r .tokens[].balance)
- balance=$((balance / 100000000))
-else
- balance=0
-fi
+auditScore=($(echo $satellites |jq -r ".audits[].auditScore"))
+auditScore=$(awk 'BEGIN {t=0; for (i in ARGV) t+=ARGV[i]; print t}' "${auditScore[@]}")
+suspensionScore=($(echo $satellites |jq -r ".audits[].suspensionScore"))
+suspensionScore=$(awk 'BEGIN {t=0; for (i in ARGV) t+=ARGV[i]; print t}' "${suspensionScore[@]}")
+onlineScore=($(echo $satellites |jq -r ".audits[].onlineScore"))
+onlineScore=$(awk 'BEGIN {t=0; for (i in ARGV) t+=ARGV[i]; print t}' "${onlineScore[@]}")
 if [[ ${error} != 'null'  ]]; then
  error=", error=${error} "
 else
@@ -54,4 +53,5 @@ echo "SMART,NodeId=${nodeID} ${aSMART[0]}=${aSMART[1]},${aSMART[2]}=${aSMART[3]}
 ${aSMART[6]}=${aSMART[7]} $(date +%s%N)"
 echo "Storj,NodeId=${nodeID} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
 egressDaily=${egressDaily},ingressDaily=${ingressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
-upToDate=${upToDate},wallet=\"${wallet}\",balance=${balance} ${error} $(date +%s%N)"
+upToDate=${upToDate},wallet=\"${wallet}\",auditScore=${auditScore},suspensionScore=${suspensionScore},\
+onlineScore=${onlineScore} ${error} $(date +%s%N)"
