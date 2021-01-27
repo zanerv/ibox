@@ -17,8 +17,9 @@ iowait=$(iostat -c|awk '/^ /{print $4}')
 cpu=$(uptime|tail -c 5)
 memory=$(free -m | awk 'NR==2{printf "%.0f", $3*100/$2 }')
 disk=$(df -h|grep /$|awk '{print $5}'|tr -d %)
+adisk_util=( $(iostat -dx|grep sd|awk '{print $1, $16}'|sed 's| |_util\=|'|tr '\n' ',') )
 temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
-echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},temperature=${temperature::2},\
+echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},${adisk_util[@]}temperature=${temperature::2},\
 last_boot=$(date -d "$(uptime -s)" +"%s"),iowait=${iowait} $(date +%s%N)"
 
 satellites=$(curl -s localhost:14002/api/sno/satellites 2>/dev/null)
