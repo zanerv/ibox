@@ -21,7 +21,9 @@ adisk_util=( $(iostat -dx|grep sd|awk '{print $1, $16}'|sed 's| |_util\=|'|tr '\
 temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
 echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},${adisk_util[@]}temperature=${temperature::2},\
 last_boot=$(date -d "$(uptime -s)" +"%s"),iowait=${iowait} $(date +%s%N)"
-
+latency=$(ping -U -c3 europe-west-1.tardigrade.io | grep avg | awk -F'/' '{print int($5+0.5)}')
+noti=$(curl -s "localhost:14002/api/notifications/list?page=1&limit=100" | jq -r .unreadCount)
+est=$(curl -s localhost:14002/api/sno/estimated-payout | jq -r .currentMonthExpectations | awk '{printf ("%'\''d\n", $0/100)}')
 satellites=$(curl -s localhost:14002/api/sno/satellites 2>/dev/null)
 dashboard=$(curl -s localhost:14002/api/sno/ 2>/dev/null)
 bandwidthSummary=$(echo ${satellites}| jq -r .bandwidthSummary 2>/dev/null)
@@ -54,4 +56,4 @@ ${aSMART[6]}=${aSMART[7]} $(date +%s%N)"
 echo "Storj,NodeId=${nodeID} bandwidthSummary=${bandwidthSummary},egressSummary=${egressSummary},\
 egressDaily=${egressDaily},ingressDaily=${ingressDaily},diskSpace=${diskSpace},lastPinged=${lastPinged},\
 upToDate=${upToDate},wallet=\"${wallet}\",auditScore=${auditScore},suspensionScore=${suspensionScore},\
-onlineScore=${onlineScore} ${error} $(date +%s%N)"
+onlineScore=${onlineScore},latency=${latency},noti=${noti},est=${est} ${error} $(date +%s%N)"
