@@ -15,7 +15,7 @@ while [ ${i} -lt 10 ]; do
      continue
   fi
   IP=$(host $(hostname -f) ${dns} | awk '{print $4}' | tr -d '[:space:]')
-  NewIP=$(curl -s https://ifconfig.me)
+  NewIP=$(curl -s http://ifconfig.me)
   if [[ $? -gt 0 ]]; then
     break
   fi
