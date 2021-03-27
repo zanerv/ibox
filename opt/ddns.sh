@@ -15,7 +15,7 @@ while [ ${i} -lt 10 ]; do
      continue
   fi
   IP=$(host $(hostname -f) ${dns} | awk '{print $4}' | tr -d '[:space:]')
-  NewIP=$(curl -s http://ifconfig.me)
+  NewIP=$(curl -s http://kpu.ro)
   if [[ $? -gt 0 ]]; then
     break
   fi
@@ -26,7 +26,9 @@ while [ ${i} -lt 10 ]; do
   i=$(( ${i} + 1 ))
 done
 if [[ ${IP} != ${NewIP} && -n ${NewIP} && -n ${IP} ]]; then
-   curl -su ${ddns_user}:${ddns_pass} "https://$(dnsdomainname)/ibox.php?hostname=$(hostname)&myip=${NewIP}"
+   output=$(curl -su ${ddns_user}:${ddns_pass} "https://$(dnsdomainname)/ibox.php?hostname=$(hostname)&myip=${NewIP}")
+   curl --silent --output /dev/null -X POST \
+     -H 'Content-Type: application/json' \
+     -d '{"chat_id": "230478165", "text": "'"${output}"'", "disable_notification": true}' \
+     https://api.telegram.org/bot${bot}/sendMessage
 fi
-
-
