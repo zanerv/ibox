@@ -26,9 +26,5 @@ while [ ${i} -lt 10 ]; do
   i=$(( ${i} + 1 ))
 done
 if [[ ${IP} != ${NewIP} && -n ${NewIP} && -n ${IP} ]]; then
-   output=$(curl -su ${ddns_user}:${ddns_pass} "https://$(dnsdomainname)/ibox.php?hostname=$(hostname)&myip=${NewIP}")
-   curl --silent --output /dev/null -X POST \
-     -H 'Content-Type: application/json' \
-     -d '{"chat_id": "230478165", "text": "'"${output}"'", "disable_notification": true}' \
-     https://api.telegram.org/bot${bot}/sendMessage
+   curl -su ${ddns_user}:${ddns_pass} "https://$(dnsdomainname)/ibox.php?hostname=$(hostname)&myip=${NewIP}"
 fi
