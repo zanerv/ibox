@@ -19,8 +19,9 @@ memory=$(free -m | awk 'NR==2{printf "%.0f", $3*100/$2 }')
 disk=$(df -h|grep /$|awk '{print $5}'|tr -d %)
 adisk_util=( $(iostat -dx|grep sd|awk '{print $1, $16}'|sed 's| |_util\=|'|tr '\n' ',') )
 temperature=$(cat /sys/devices/virtual/thermal/thermal_zone0/temp)
+ps=$(ps -ef|wc -l)
 echo "Sys,Host=${HOSTNAME} cpu=${cpu},memory=${memory},disk=${disk},${adisk_util[@]}temperature=${temperature::2},\
-last_boot=$(date -d "$(uptime -s)" +"%s"),iowait=${iowait} $(date +%s%N)"
+last_boot=$(date -d "$(uptime -s)" +"%s"),iowait=${iowait},ps=${ps} $(date +%s%N)"
 latency=$(ping -U -c3 europe-west-1.tardigrade.io | grep avg | awk -F'/' '{print int($5+0.5)}')
 noti=$(curl -s "localhost:14002/api/notifications/list?page=1&limit=100" | jq -r .unreadCount)
 est=$(curl -s localhost:14002/api/sno/estimated-payout | jq -r .currentMonthExpectations | awk '{printf ("%'\''d\n", $0/100)}')
