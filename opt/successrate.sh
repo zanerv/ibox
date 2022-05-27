@@ -28,7 +28,7 @@ docker logs --since $TIMEFRAME $CONTAINER_NAME > ${LOG} 2>&1
 
 #Get Node ID (NOTE: Head-n15 may prove to be unreliable for users that may archive early parts of the file,
 #since it's the fastest way, we'll leave it for now)
-node_id=$(eval "docker logs $CONTAINER_NAME" 2>&1| head -n15 | awk -F' ' '/Node/ && /started/{print substr($4,0,7)}')
+node_id=$(eval "docker logs $CONTAINER_NAME" 2>&1| head -n600 | awk -F' ' '/Node/ && /started/{print substr($4,0,7)}')
 #NO_SUCH_CONTAINER_ERROR="Error: No such container: $CONTAINER_NAME"
 #Cath if node ID collector fails (name Default)
 if [ -z "$node_id" ]
